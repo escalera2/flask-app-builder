@@ -1,43 +1,43 @@
-from flask import current_app, render_template
-
-"""
-    Create your Model based REST API::
-
-    class MyModelApi(ModelRestApi):
-        datamodel = SQLAInterface(MyModel)
-
-    appbuilder.add_api(MyModelApi)
+from flask_appbuilder import ModelView
+from flask_appbuilder.models.sqla.interface import SQLAInterface
+from . import appbuilder
+from .models import Categoria, Ingrediente, Plato, Receta, MovimientoInventario
 
 
-    Create your Views::
+class CategoriaModelView(ModelView):
+    datamodel = SQLAInterface(Categoria)
+    list_columns = ["nombre", "descripcion", "activo"]
 
 
-    class MyModelView(ModelView):
-        datamodel = SQLAInterface(MyModel)
+class IngredienteModelView(ModelView):
+    datamodel = SQLAInterface(Ingrediente)
+    list_columns = ["nombre", "categoria", "cantidad",
+                    "unidad_medida", "costo_unitario", "stock_minimo", "activo"]
 
 
-    Next, register your Views on create_app Flask factory::
+class PlatoModelView(ModelView):
+    datamodel = SQLAInterface(Plato)
+    list_columns = ["nombre", "precio", "activo"]
 
 
-    appbuilder.add_view(
-        MyModelView,
-        "My View",
-        icon="fa-folder-open-o",
-        category="My Category",
-        category_icon='fa-envelope'
-    )
-"""
-
-"""
-    Application wide 404 error handler
-"""
+class RecetaModelView(ModelView):
+    datamodel = SQLAInterface(Receta)
+    list_columns = ["plato", "ingrediente", "cantidad_necesaria"]
 
 
-@current_app.errorhandler(404)
-def page_not_found(e):
-    return (
-        render_template(
-            "404.html", base_template=appbuilder.base_template, appbuilder=appbuilder
-        ),
-        404,
-    )
+class MovimientoInventarioModelView(ModelView):
+    datamodel = SQLAInterface(MovimientoInventario)
+    list_columns = ["fecha", "ingrediente",
+                    "tipo", "cantidad", "usuario", "motivo"]
+
+
+appbuilder.add_view(CategoriaModelView, "Categorías", icon="fa-folder",
+                    category="Inventario", category_icon="fa-archive")
+appbuilder.add_view(IngredienteModelView, "Ingredientes",
+                    icon="fa-apple", category="Inventario")
+appbuilder.add_view(PlatoModelView, "Platos", icon="fa-cutlery",
+                    category="Cocina", category_icon="fa-book")
+appbuilder.add_view(RecetaModelView, "Recetas",
+                    icon="fa-list-alt", category="Cocina")
+appbuilder.add_view(MovimientoInventarioModelView,
+                    "Movimientos", icon="fa-exchange", category="Inventario")

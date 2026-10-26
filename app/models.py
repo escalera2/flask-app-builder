@@ -66,8 +66,8 @@ class MovimientoInventario(db.Model):
     ingrediente_id = db.Column(db.Integer, db.ForeignKey(
         "ingredientes.id"), nullable=False)
 
-    usuario_id = db.Column(db.Integer, db.ForeignKey(
-        "ab_user.id"), nullable=False)
+    usuario_id = db.Column(db.Integer, db.ForeignKey(User.id), nullable=False)
+
     tipo = db.Column(db.String(10), nullable=False)
     cantidad = db.Column(db.Numeric(12, 3), nullable=False)
     motivo = db.Column(db.String(250), nullable=True)
